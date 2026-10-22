@@ -1,10 +1,23 @@
+
 CREATE DATABASE escuela;
 USE escuela;
+
+CREATE TABLE Profesores (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Dni VARCHAR(9) NOT NULL UNIQUE,
+    Nombre VARCHAR(50) NOT NULL,
+    Apellidos VARCHAR(100) NOT NULL,
+    Email VARCHAR(100),
+    Especialidad VARCHAR(50)
+);
 
 CREATE TABLE Cursos (
     Id INT PRIMARY KEY AUTO_INCREMENT,
     Nombre VARCHAR(50) NOT NULL,
-    Tutor VARCHAR(100)
+    TutorId INT,
+    FOREIGN KEY (TutorId) REFERENCES Profesores(Id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE Alumnos (
@@ -24,7 +37,11 @@ CREATE TABLE Asignaturas (
     Id INT PRIMARY KEY AUTO_INCREMENT,
     Codigo VARCHAR(10) NOT NULL UNIQUE,
     Nombre VARCHAR(50) NOT NULL,
-    HorasSemanales INT NOT NULL CHECK (HorasSemanales > 0)
+    HorasSemanales INT NOT NULL CHECK (HorasSemanales > 0),
+    ProfesorId INT,
+    FOREIGN KEY (ProfesorId) REFERENCES Profesores(Id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE Notas (
@@ -41,13 +58,4 @@ CREATE TABLE Notas (
         ON UPDATE CASCADE
 );
 
-CREATE TABLE Boletines (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    AlumnoId INT NOT NULL,
-    Evaluacion VARCHAR(20) NOT NULL,
-    NotaMedia DECIMAL(4,2) NOT NULL,
-    Fecha DATE NOT NULL,
-    FOREIGN KEY (AlumnoId) REFERENCES Alumnos(Id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
+
